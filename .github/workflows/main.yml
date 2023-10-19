@@ -1,0 +1,24 @@
+name: Deploy to Hostinger
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Deploy to Hostinger
+      uses: appleboy/ssh-action@master
+      with:
+        host: 154.41.239.71
+        username: u625959064
+        port: 65002
+        key: ${{ secrets.HOSTINGER_SSH_KEY }}
+        script: |
+          cd /home/u625959064/domains/writeomatic.app/public_html/writeomatic
+          git pull origin main
