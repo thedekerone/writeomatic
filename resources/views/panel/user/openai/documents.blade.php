@@ -13,7 +13,7 @@
 						{{__('Back to dashboard')}}
 					</a>
                     <h2 class="page-title mb-2">
-                        {{__('My Documentsss')}}
+                        {{__('My Documents')}}
                     </h2>
                 </div>
             </div>
