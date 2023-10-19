@@ -48,10 +48,10 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
                 Route::post('/add', [IntegrationController::class, 'add'])->name('add');
                 Route::get('/remove/{name}', [IntegrationController::class, 'remove'])->name('remove');
             });
-
-            Route::middleware('premiumUser')->group(function () {
-                Route::prefix('scheduler')->name('scheduler.')->group(function () {
-                    Route::get('/', [UserController::class, 'openScheduler'])->name('index');
+            
+            Route::prefix('scheduler')->name('scheduler.')->group(function () {
+                Route::get('/', [UserController::class, 'openScheduler'])->name('index');
+                Route::middleware('premiumUser')->group(function () {
                     Route::post('/add', [UserController::class, 'scheduleDocument'])->name('add');
                     Route::get('/delete/{id}', [UserController::class, 'deleteScheduledDocument'])->name('delete');
                 });

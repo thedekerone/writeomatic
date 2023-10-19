@@ -2,6 +2,18 @@
 @section('title', 'My Scheduled Documents')
 
 @section('content')
+    <div class="unlock-wrapper" id="unlockWrapper">
+        <div class="unlock-content dark:bg-black">
+            <h2>Premium feature locked</h2>
+            <p>Activate your premium subscription to unlock this feature</p>
+            <a class="btn btn-primary" href="{{route('dashboard.user.payment.subscription')}}">
+                <svg class="md:me-2 max-lg:w-[20px] max-lg:h-[20px]" width="11" height="15" viewBox="0 0 11 15" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6.6 0L0 9.375H4.4V15L11 5.625H6.6V0Z" />
+                </svg>
+                <span class="max-lg:hidden">{{__('Upgrade')}}</span>
+            </a>
+        </div>
+    </div>
     <div class="page-header">
         <div class="container-xl">
             <div class="row g-2 items-center">
@@ -164,4 +176,30 @@
 
 @push('css')
    <link rel="stylesheet" href="/assets/libs/flatpickr/flatpickr.min.css">
+   <style>
+        .page-wrapper {
+            position: relative;
+        }
+        .unlock-wrapper {
+            position: absolute;
+            top: -10%;
+            left: -20%;
+            width: 100vw;
+            height: 100vh;
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px); 
+            background-color: rgba(255, 255, 255, 0.6);
+            display: flex;
+            text-align: center;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+        .unlock-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+    </style>
 @endpush

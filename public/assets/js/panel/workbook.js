@@ -60,6 +60,18 @@ document.getElementById("publish-doc").addEventListener("click", function(event)
 	});
 });
 
+function UnlockFeature (e) {
+	"use strict";
+    
+    e.preventDefault();
+    const popup = document.getElementById("unlock_feature");
+    popup.style.display = "flex";
+    const closeButton = document.getElementById("close_feature_popup");
+    closeButton.addEventListener("click", function() {
+        popup.style.display = "none";
+    });
+}
+
 function ScheduleDocument (e) {
     "use strict";
     
@@ -181,8 +193,13 @@ document.addEventListener( "DOMContentLoaded", function () {
     outputContainer.innerHTML = updatedOutput;
 
 	const scheduleButton = document.getElementById("schedule-doc");
-    if(scheduleButton)
-        scheduleButton.addEventListener("click", ScheduleDocument);
+    if(scheduleButton) {
+		if(plan_type === 'regular')
+			scheduleButton.addEventListener("click", UnlockFeature);
+		else
+			scheduleButton.addEventListener("click", ScheduleDocument);
+	}
+        
 
 	const tinymceOptions = {
 		selector: '.tinymce',
