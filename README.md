@@ -9,10 +9,6 @@ Welcome to `Writeomatic.app`, a web application powered by the Laravel framework
 - [Configuration](#configuration)
 - [Database Setup](#database-setup)
 - [Running the App](#running-the-app)
-- [API Credentials](#api-credentials)
-- [Testing](#testing)
-- [Contributing](#contributing)
-- [License](#license)
 
 ## 🔧 Prerequisites
 
