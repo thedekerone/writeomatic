@@ -1,0 +1,36 @@
+# Directories
+/node_modules/
+/vendor/
+/public/hot
+/public/storage
+/storage/*.key
+/bootstrap/cache/
+/bootstrap/compiled.php # From Laravel 4
+app/storage/ # From Laravel 4
+
+# Laravel Environment File & Variants
+.env
+.env.backup
+# .env.example
+.env.*.php
+.env.php
+
+# Laravel-specific
+.phpunit.result.cache
+Homestead.json
+Homestead.yaml
+npm-debug.log
+yarn-error.log
+
+# IDE-specific
+.idea/
+.vscode/
+*.code-workspace
+
+# Operating System specific
+.DS_Store
+Thumbs.db
+
+# Archive Files
+*.zip
+
