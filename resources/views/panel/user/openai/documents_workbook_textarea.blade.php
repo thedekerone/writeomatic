@@ -1,4 +1,3 @@
-
 <div class="row text-[13px] items-center">
 	<div class="col-12 ms-auto flex items-center">
 		@if($workbook->generator->type != 'code')
@@ -63,18 +62,9 @@
 	    <a id="publish-doc" class="btn btn-primary me-1" href="#">
 			<span>Publish</span>
 		</a>
-		@php 
-			$plan = Auth::user()->activePlan();
-			$plan_type = 'regular';
-			if ( $plan != null ) {
-				$plan_type = strtolower($plan->plan_type);
-			}
-		@endphp
-		@if($plan_type === 'regular')
-    	    <a id="schedule-doc" class="btn btn-warning" href="#">
-    			<span>Schedule</span>
-    		</a>
-		@endif
+		<a id="schedule-doc" class="btn btn-warning" href="#">
+			<span>Schedule</span>
+		</a>
 	</div>
 </div>
 @if($workbook->generator->type == 'code')

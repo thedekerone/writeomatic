@@ -76,7 +76,6 @@
 							</span>
                         </a>
                     </li>
-                    @if(Auth::user()->pm_type)
                     <li class="nav-item">
                         <a class="nav-link {{activeRoute('dashboard.user.scheduler')}}" href="{{route('dashboard.user.scheduler.index')}}">
 							<span class="nav-link-icon">
@@ -87,7 +86,6 @@
 							</span>
                         </a>
                     </li>
-                    @endif
 					@if ( $setting->feature_ai_image )
 					<li class="nav-item">
 						<a class="nav-link {{ route('dashboard.user.openai.generator', 'ai_image_generator') == url()->current() ? 'active' : '' }}" href="{{route('dashboard.user.openai.generator', 'ai_image_generator')}}" >

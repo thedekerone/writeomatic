@@ -1,6 +1,12 @@
 @extends('panel.layout.app')
 @section('title', 'Workbook')
-
+@php 
+	$plan = Auth::user()->activePlan();
+	$plan_type = 'regular';
+	if ( $plan != null ) {
+		$plan_type = strtolower($plan->plan_type);
+	}
+@endphp
 @section('content')
     <div class="page-header">
         <div class="container-xl">
@@ -87,6 +93,25 @@
             </div>
         </div>
     </div>
+    <div class="popup" id="unlock_feature">
+        <div class="popup-body col-lg-4 col-md-4 col-sm-12">
+            <div class="popup-header">
+                <h2>Premium feature locked</h2>
+                <span id="close_feature_popup" class="close-popup">&times;</span>
+            </div>
+            <div class="popup-content">
+                <div class="mb-3 col-xs-12 text-center">
+                <p>Activate your premium subscription to unlock this feature</p>
+                <a class="btn btn-primary" href="{{route('dashboard.user.payment.subscription')}}">
+                    <svg class="md:me-2 max-lg:w-[20px] max-lg:h-[20px]" width="11" height="15" viewBox="0 0 11 15" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6.6 0L0 9.375H4.4V15L11 5.625H6.6V0Z" />
+                    </svg>
+                    <span class="max-lg:hidden">{{__('Upgrade')}}</span>
+                </a>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 @section('script')
     <script src="/assets/libs/marked.umd.js"></script>
@@ -94,6 +119,7 @@
     <script>
        const workbook = @json($workbook);
        const unsplashKey = @json($unsplashKey);
+       const plan_type = @json($plan_type);
     </script>
     <script src="/assets/libs/flatpickr/flatpickr.js"></script>
     <script src="/assets/js/panel/workbook.js"></script>
@@ -127,22 +153,21 @@
 @push('css')
    <link rel="stylesheet" href="/assets/libs/flatpickr/flatpickr.min.css">
    <style>
-    .image-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 16px;
-}
-
-.image-grid img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: transform 0.3s ease-in-out;
-}
-.image-grid img:hover {
-        transform: scale(1.05);
-    }
-        </style>
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px;
+        }
+        .image-grid img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.3s ease-in-out;
+        }
+        .image-grid img:hover {
+            transform: scale(1.05);
+        }
+    </style>
 @endpush

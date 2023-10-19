@@ -16,9 +16,14 @@ class isPremiumUser
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::user()->pm_type){
+        $plan = Auth::user()->activePlan();
+		$plan_type = 'regular';
+		if ( $plan != null ) {
+			$plan_type = strtolower($plan->plan_type);
+		}
+        if ($plan_type !== 'regular'){
             return $next($request);
-        }else{
+        } else{
             return redirect()->route('index');
         }
     }
