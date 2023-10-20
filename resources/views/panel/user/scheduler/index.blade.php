@@ -145,32 +145,35 @@
 @section('script')
     <script src="/assets/libs/flatpickr/flatpickr.js"></script>
     <script>
-        document.getElementById('reschedule_doc').addEventListener('click', function(e){
-            e.preventDefault();
-            const popup = document.getElementById("reschedule_popup");
-            popup.style.display = "flex";
-            const closeButton = document.getElementById("close_popup");
-            closeButton.addEventListener("click", function() {
-                popup.style.display = "none";
+        const rescheduleBtn = document.getElementById('reschedule_doc');
+        if (rescheduleBtn) {
+            rescheduleBtn.addEventListener('click', function(e){
+                e.preventDefault();
+                const popup = document.getElementById("reschedule_popup");
+                popup.style.display = "flex";
+                const closeButton = document.getElementById("close_popup");
+                closeButton.addEventListener("click", function() {
+                    popup.style.display = "none";
+                });
+                document.getElementById("selected_acc").innerText = event.target.getAttribute('data-account');
+                document.getElementById("selected_doc").innerText = event.target.getAttribute('data-title');
+                const selectedDate = event.target.getAttribute('data-time');
+                flatpickr("#datetimepicker", {
+                    inline: true,
+                    enableTime: true,
+                    minDate: "today",
+                    defaultDate: selectedDate,
+                    onChange: function(selectedDates, dateStr, instance) {
+                        if(new Date(dateStr).getTime() !== new Date(selectedDate).getTime()) {
+                        document.getElementById("rescheduled-time").style.display = "block";
+                        document.getElementById("datetimevalue").innerText = dateStr;
+                        } else 
+                            document.getElementById("rescheduled-time").style.display = "none";
+                    }
+                });
+            // document.getElementById("reschedule_confirm").addEventListener("click", ConfirmSchedule);
             });
-            document.getElementById("selected_acc").innerText = event.target.getAttribute('data-account');
-            document.getElementById("selected_doc").innerText = event.target.getAttribute('data-title');
-            const selectedDate = event.target.getAttribute('data-time');
-            flatpickr("#datetimepicker", {
-                inline: true,
-                enableTime: true,
-                minDate: "today",
-                defaultDate: selectedDate,
-                onChange: function(selectedDates, dateStr, instance) {
-                    if(new Date(dateStr).getTime() !== new Date(selectedDate).getTime()) {
-                    document.getElementById("rescheduled-time").style.display = "block";
-                    document.getElementById("datetimevalue").innerText = dateStr;
-                    } else 
-                        document.getElementById("rescheduled-time").style.display = "none";
-                }
-            });
-           // document.getElementById("reschedule_confirm").addEventListener("click", ConfirmSchedule);
-        });
+        }
     </script>
 @endsection
 
@@ -179,6 +182,9 @@
    <style>
         .page-wrapper {
             position: relative;
+        }
+        .navbar .dropdown-menu {
+            z-index: 99999;
         }
         .unlock-wrapper {
             position: absolute;
