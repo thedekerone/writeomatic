@@ -429,9 +429,9 @@ class UserController extends Controller
         $originalName = pathinfo($request->file('file')->getClientOriginalName(), PATHINFO_FILENAME);
         $extension = $request->file('file')->getClientOriginalExtension();
         $filename = $originalName . '-' . Carbon::now()->format('YmdHis') . '.' . $extension;
-        $path = $request->file('file')->storeAs('images/documents', $filename, 'public');
+        $path = $request->file('file')->storeAs('documents', $filename, 'public');
         if($path) {
-            return response()->json(['location' => url('/upload/' . $path)]);
+            return response()->json(['location' => url('/uploads/' . $path)]);
         } else {
             return response()->json(['error' => 'File could not be stored.'], 500);
         }
