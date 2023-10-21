@@ -13,6 +13,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+
         $path = resource_path('/dev_tools/currency.sql');
         DB::unprepared(file_get_contents($path));
 

@@ -15,6 +15,9 @@ app/storage/ # From Laravel 4
 .env.*.php
 .env.php
 
+# Local Env Changes
+AppServiceProvider.php
+
 # Laravel-specific
 .phpunit.result.cache
 Homestead.json
@@ -30,6 +33,8 @@ yarn-error.log
 # Operating System specific
 .DS_Store
 Thumbs.db
+
+package-lock.json
 
 # Archive Files
 *.zip

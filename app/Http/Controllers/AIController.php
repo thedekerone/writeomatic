@@ -49,7 +49,7 @@ class AIController extends Controller
         
         $image_generator = $request->image_generator;
         $post_type = $request->post_type;
-
+        $post_title = $request->post_title;
         //SETTINGS
         $number_of_results = $request->number_of_results;
         $maximum_length = $request->maximum_length;
@@ -73,7 +73,59 @@ class AIController extends Controller
 
         $negative_prompt = $request->negative_prompt;
         $tone_of_voice = $request->tone_of_voice;
+        $iteration_type = null;
+        if ($post_title == 'All In One - Iteratively Build Your Article') {
+            $iteration_type = $request->iteration_type;
 
+            if ($iteration_type == 'iterative_title') {
+                $your_description = $request['description'];
+                $your_keywords = $request['keywords'];
+                $prompt = "I need one article title that:\n";
+                $prompt .= "- Is related to these keywords: '$your_keywords'\n";
+                $prompt .= "- Focus on this topic or theme: '$your_description'\n";
+                $prompt .= "- Use the $language language\n";
+                $prompt .= "- no bullets, or numbering\n";
+            }
+            
+            if ($iteration_type == 'iterative_introduction') {
+                $chosen_title = $request->chosen_title;
+                $your_description = $request['description'];
+                $your_keywords = $request['keywords'];
+                $prompt = "Craft an introduction based on the following details:\n";
+                $prompt .= "- The article title is: '$chosen_title'\n";
+                $prompt .= "- The article will discuss or focus on: '$your_description'\n";
+                $prompt .= "- Keywords to include: $your_keywords\n";
+            }
+            
+            if ($iteration_type == 'iterative_headings') {
+                $chosen_title = $request->chosen_title;
+                $chosen_intro = $request->chosen_intro;
+                $your_description = $request['description'];
+                $your_keywords = $request['keywords'];
+                $prompt = "I'm looking for $number_of_results main headings for an article with these details:\n";
+                $prompt .= "- Title of the article: '$chosen_title'\n";
+                $prompt .= "- Introduction of the article: '$chosen_intro'\n";
+                $prompt .= "- The article's main topic or theme: '$your_description'\n";
+                $prompt .= "- Important keywords: $your_keywords\n";
+            }
+            
+            if ($iteration_type == 'iterative_article') {
+                $chosen_title = $request->chosen_title;
+                $chosen_intro = $request->chosen_intro;
+                $chosen_headings = $request->chosen_headings;
+                $your_description = $request['description'];
+                $your_keywords = $request['keywords'];
+                $prompt = "Write a properly formatted article using the following details:\n";
+                $prompt .= "- Title: '$chosen_title'\n";
+                $prompt .= "- Introduction: '$chosen_intro'\n";
+                $prompt .= "- Main Headings: $chosen_headings\n";
+                $prompt .= "- Additional instructions or themes for the article: '$your_description'\n";
+                $prompt .= "- Keywords to incorporate: $your_keywords\n";
+                $prompt .= "- Ensure the language is in $language and maintains a $tone_of_voice tone throughout.";
+            }
+            
+
+        }
         //POST TITLE GENERATOR
         if ($post_type == 'post_title_generator') {
             $your_description = $request->your_description;
@@ -335,10 +387,11 @@ class AIController extends Controller
             $code_language = $request->code_language;
             $prompt = "Write a code about $description, in $code_language";
         }
-
+        
         $post = OpenAIGenerator::where('slug', $post_type)->first();
-
-        if ($post->custom_template == 1) {
+        $out = new \Symfony\Component\Console\Output\ConsoleOutput();
+        $out->writeln($post);
+        if ($post->custom_template == 1 && $post_title != 'All In One - Iteratively Build Your Article') {
             $custom_template = OpenAIGenerator::where('id', $request->openai_id)->first();
             $prompt = $custom_template->prompt;
             foreach (json_decode($custom_template->questions) as $question) {
@@ -348,6 +401,8 @@ class AIController extends Controller
 
             $prompt .= " in $language language. Number of results should be $number_of_results. And the maximum length of $maximum_length characters";
         }
+
+        $post->iteration = $iteration_type;
 
         if ($post->type == 'text') {
             return $this->textOutput($prompt, $post, $creativity, $maximum_length, $number_of_results, $user);
@@ -374,12 +429,15 @@ class AIController extends Controller
         $message_id = $request->message_id;
         $message = UserOpenai::whereId($message_id)->first();
         $prompt = $message->input;
+        $iteration_type = $request->iteration_type;
 
+
+        //$out->writeln($iteration_type);
         $creativity = $request->creativity;
         $maximum_length = $request->maximum_length;
         $number_of_results = $request->number_of_results;
 
-        return response()->stream(function () use ($prompt, $message_id, $settings, $creativity, $maximum_length, $number_of_results) {
+        return response()->stream(function () use ($iteration_type, $prompt, $message_id, $settings, $creativity, $maximum_length, $number_of_results) {
 
             try {
                 if ($this->settings->openai_default_model == 'gpt-3.5-turbo' or $this->settings->openai_default_model == 'gpt-4') {
@@ -522,7 +580,14 @@ class AIController extends Controller
             $message->hash = Str::random(256);
             $message->credits = $total_used_tokens;
             $message->words = 0;
-            $message->save();
+            // $message->save();
+
+            if ($iteration_type == null || $iteration_type == "iterative_article") {
+                $message->save();
+            }
+            else if ($iteration_type != "iterative_article") {
+                $message->delete();
+            }
 
             $user = Auth::user();
             if ($user->remaining_words != -1) {
@@ -569,11 +634,13 @@ class AIController extends Controller
         $entry->words = 0;
         $entry->save();
 
+        $iteration_type = $post->iteration;
         $message_id = $entry->id;
         $workbook = $entry;
         $inputPrompt = $prompt;
+
         $html = view('panel.user.openai.documents_workbook_textarea', compact('workbook'))->render();
-        return response()->json(compact('message_id', 'html', 'creativity', 'maximum_length', 'number_of_results', 'inputPrompt'));
+        return response()->json(compact('iteration_type', 'message_id', 'html', 'creativity', 'maximum_length', 'number_of_results', 'inputPrompt'));
     }
 
     public function codeOutput($prompt, $post, $user)

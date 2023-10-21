@@ -73,9 +73,39 @@
                                 </div>
                             </div>
                         </div>
+                        
                     </div>
                     <form class="row" id="openai_generator_form" onsubmit="return sendOpenaiGeneratorForm();">
+                        @if($openai->title == 'All In One - Iteratively Build Your Article')
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+                            <div id="step_title" style="position: relative; flex-grow: 1; text-align: center;">
+                                <span style="display: inline-block; width: 30px; height: 30px; border-radius: 50%; background-color: #330582; line-height: 30px; text-align: center; color: #fff;">1</span>
+                                <span style="display: block; margin-top: 5px;">{{__('Title')}}</span>
+                            </div>
+                            <div id="step_intro" style="position: relative; flex-grow: 1; text-align: center;">
+                                <span style="display: inline-block; width: 30px; height: 30px; border-radius: 50%; background-color: #e0e0e0; line-height: 30px; text-align: center; color: #fff;">2</span>
+                                <span style="display: block; margin-top: 5px;">{{__('Introduction')}}</span>
+                            </div>
+                            <div id="step_headings" style="position: relative; flex-grow: 1; text-align: center;">
+                                <span style="display: inline-block; width: 30px; height: 30px; border-radius: 50%; background-color: #e0e0e0; line-height: 30px; text-align: center; color: #fff;">3</span>
+                                <span style="display: block; margin-top: 5px;">{{__('Headings')}}</span>
+                            </div>
+                            <div id="step_article" style="position: relative; flex-grow: 1; text-align: center;">
+                                <span style="display: inline-block; width: 30px; height: 30px; border-radius: 50%; background-color: #e0e0e0; line-height: 30px; text-align: center; color: #fff;">4</span>
+                                <span style="display: block; margin-top: 5px;">{{__('Article')}}</span>
+                            </div>
+                        </div>
 
+                        <div class="mb-3 col-xs-12">
+                            <label class="form-label">{{__('What would you like to generate?')}}</label>
+                            <select class="form-select" id="generation_type" name="generation_type" required>
+                                <option value="title">{{__('Title')}}</option>
+                                <option value="introduction" disabled>{{__('Introduction')}}</option>
+                                <option value="headings" disabled>{{__('Headings')}}</option>
+                                <option value="article" disabled>{{__('Article')}}</option>
+                            </select>
+                        </div>
+                        @endif
                         @foreach(json_decode($openai->questions) as $question)
                             <div class="mb-3 col-xs-12">
 								@php
@@ -98,49 +128,98 @@
                         @endforeach
 
                         @if($openai->type == 'text')
+                            @if($openai->title == 'All In One - Iteratively Build Your Article')
+                                
 
-							<div class="mb-3 col-xs-12">
+                                <div class="mb-3 col-xs-12 col-md-6" id="maximum_length_div" style="display: none;">
+                                    <label class="form-label">{{__('Maximum Length')}}</label>
+                                    <input type="number" class="form-control" id="maximum_length" name="maximum_length" max="{{$setting->openai_max_output_length}}" value="400" placeholder="{{__('Maximum character length of text')}}" required>
+                                </div>
+
+                                <div class="mb-3 col-xs-12 col-md-6" id="number_of_results_div" style="display: none;">
+                                    <label class="form-label">{{__('Number of Results')}}</label>
+                                    <input type="number" class="form-control" id="number_of_results" name="number_of_results" value="1" placeholder="{{__('Number of results')}}" required>
+                                </div>
+
+
+                                <div class="mb-3 col-xs-12 col-md-6" id="creativity_div" style="display: none;">
+                                    <label class="form-label">{{__('Creativity')}}</label>
+                                    <select type="text" class="form-select" name="creativity" id="creativity" required>
+                                        <option value="0.25" {{$setting->openai_default_creativity == 0.25 ? 'selected' : ''}}>{{__('Economic')}}</option>
+                                        <option value="0.5" {{$setting->openai_default_creativity == 0.5 ? 'selected' : ''}}>{{__('Average')}}</option>
+                                        <option value="0.75" {{$setting->openai_default_creativity == 0.75 ? 'selected' : ''}}>{{__('Good')}}</option>
+                                        <option value="1" {{$setting->openai_default_creativity == 1 ? 'selected' : ''}}>{{__('Premium')}}</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3 col-xs-12 col-md-6" id="tone_of_voice_div" style="display: none;">
+                                    <div class="form-label">{{__('Tone of Voice')}}</div>
+                                    <select class="form-select" id="tone_of_voice" name="tone_of_voice" required>
+                                    <option value="Professional" {{$setting->openai_default_tone_of_voice == 'Professional' ? 'selected' : null}}>{{__('Professional')}}</option>
+                                        <option value="Funny" {{$setting->opena_default_tone_of_voice == 'Funny' ? 'selected' : null}}>{{__('Funny')}}</option>
+                                        <option value="Casual" {{$setting->openai_default_tone_of_voice == 'Casual' ? 'selected' : null}}>{{__('Casual')}}</option>
+                                        <option value="Excited" {{$setting->openai_default_tone_of_voice == 'Excited' ? 'selected' : null}}>{{__('Excited')}}</option>
+                                        <option value="Witty" {{$setting->openai_default_tone_of_voice == 'Witty' ? 'selected' : null}}>{{__('Witty')}}</option>
+                                        <option value="Sarcastic" {{$setting->openai_default_tone_of_voice == 'Sarcastic' ? 'selected' : null}}>{{__('Sarcastic')}}</option>
+                                        <option value="Feminine" {{$setting->openai_default_tone_of_voice == 'Feminine' ? 'selected' : null}}>{{__('Feminine')}}</option>
+                                        <option value="Masculine" {{$setting->openai_default_tone_of_voice == 'Masculine' ? 'selected' : null}}>{{__('Masculine')}}</option>
+                                        <option value="Bold" {{$setting->openai_default_tone_of_voice == 'Bold' ? 'selected' : null}}>{{__('Bold')}}</option>
+                                        <option value="Dramatic" {{$setting->openai_default_tone_of_voice == 'Dramatic' ? 'selected' : null}}>{{__('Dramatic')}}</option>
+                                        <option value="Grumpy" {{$setting->openai_default_tone_of_voice == 'Grumpy' ? 'selected' : null}}>{{__('Grumpy')}}</option>
+                                        <option value="Secretive" {{$setting->openai_default_tone_of_voice == 'Secretive' ? 'selected' : null}}>{{__('Secretive')}}</option>
+                                    </select>
+                                </div>
+
+                            
+                            @else
+
+
+                                <div class="mb-3 col-xs-12 col-md-6" id="maximum_length_div">
+                                    <label class="form-label">{{__('Maximum Length')}}</label>
+                                    <input type="number" class="form-control" id="maximum_length" name="maximum_length" max="{{$setting->openai_max_output_length}}" value="400" placeholder="{{__('Maximum character length of text')}}" required>
+                                </div>
+
+                                <div class="mb-3 col-xs-12 col-md-6" id="number_of_results_div">
+                                    <label class="form-label">{{__('Number of Results')}}</label>
+                                    <input type="number" class="form-control" id="number_of_results" name="number_of_results" value="1" placeholder="{{__('Number of results')}}" required>
+                                </div>
+
+
+                                <div class="mb-3 col-xs-12 col-md-6" id="creativity_div">
+                                    <label class="form-label">{{__('Creativity')}}</label>
+                                    <select type="text" class="form-select" name="creativity" id="creativity" required>
+                                        <option value="0.25" {{$setting->openai_default_creativity == 0.25 ? 'selected' : ''}}>{{__('Economic')}}</option>
+                                        <option value="0.5" {{$setting->openai_default_creativity == 0.5 ? 'selected' : ''}}>{{__('Average')}}</option>
+                                        <option value="0.75" {{$setting->openai_default_creativity == 0.75 ? 'selected' : ''}}>{{__('Good')}}</option>
+                                        <option value="1" {{$setting->openai_default_creativity == 1 ? 'selected' : ''}}>{{__('Premium')}}</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3 col-xs-12 col-md-6" id="tone_of_voice_div">
+                                    <div class="form-label">{{__('Tone of Voice')}}</div>
+                                    <select class="form-select" id="tone_of_voice" name="tone_of_voice" required>
+                                    <option value="Professional" {{$setting->openai_default_tone_of_voice == 'Professional' ? 'selected' : null}}>{{__('Professional')}}</option>
+                                        <option value="Funny" {{$setting->opena_default_tone_of_voice == 'Funny' ? 'selected' : null}}>{{__('Funny')}}</option>
+                                        <option value="Casual" {{$setting->openai_default_tone_of_voice == 'Casual' ? 'selected' : null}}>{{__('Casual')}}</option>
+                                        <option value="Excited" {{$setting->openai_default_tone_of_voice == 'Excited' ? 'selected' : null}}>{{__('Excited')}}</option>
+                                        <option value="Witty" {{$setting->openai_default_tone_of_voice == 'Witty' ? 'selected' : null}}>{{__('Witty')}}</option>
+                                        <option value="Sarcastic" {{$setting->openai_default_tone_of_voice == 'Sarcastic' ? 'selected' : null}}>{{__('Sarcastic')}}</option>
+                                        <option value="Feminine" {{$setting->openai_default_tone_of_voice == 'Feminine' ? 'selected' : null}}>{{__('Feminine')}}</option>
+                                        <option value="Masculine" {{$setting->openai_default_tone_of_voice == 'Masculine' ? 'selected' : null}}>{{__('Masculine')}}</option>
+                                        <option value="Bold" {{$setting->openai_default_tone_of_voice == 'Bold' ? 'selected' : null}}>{{__('Bold')}}</option>
+                                        <option value="Dramatic" {{$setting->openai_default_tone_of_voice == 'Dramatic' ? 'selected' : null}}>{{__('Dramatic')}}</option>
+                                        <option value="Grumpy" {{$setting->openai_default_tone_of_voice == 'Grumpy' ? 'selected' : null}}>{{__('Grumpy')}}</option>
+                                        <option value="Secretive" {{$setting->openai_default_tone_of_voice == 'Secretive' ? 'selected' : null}}>{{__('Secretive')}}</option>
+                                    </select>
+                                </div>
+
+
+                            @endif
+                            
+                            <div class="mb-3 col-xs-12">
                                 <label class="form-label">{{__('Language')}}</label>
                                 <select type="text" class="form-select" name="language" id="language" required>
                                     @include('panel.user.openai.components.countries')
-                                </select>
-                            </div>
-
-                            <div class="mb-3 col-xs-12 col-md-6">
-                                <label class="form-label">{{__('Maximum Length')}}</label>
-                                <input type="number" class="form-control" id="maximum_length" name="maximum_length" max="{{$setting->openai_max_output_length}}" value="400" placeholder="{{__('Maximum character length of text')}}" required>
-                            </div>
-
-                            <div class="mb-3 col-xs-12 col-md-6">
-                                <label class="form-label">{{__('Number of Results')}}</label>
-                                <input type="number" class="form-control" id="number_of_results" name="number_of_results" value="1" placeholder="{{__('Number of results')}}" required>
-                            </div>
-
-                            <div class="mb-3 col-xs-12 col-md-6">
-                                <label class="form-label">{{__('Creativity')}}</label>
-                                <select type="text" class="form-select" name="creativity" id="creativity" required>
-                                    <option value="0.25" {{$setting->openai_default_creativity == 0.25 ? 'selected' : ''}}>{{__('Economic')}}</option>
-                                    <option value="0.5" {{$setting->openai_default_creativity == 0.5 ? 'selected' : ''}}>{{__('Average')}}</option>
-                                    <option value="0.75" {{$setting->openai_default_creativity == 0.75 ? 'selected' : ''}}>{{__('Good')}}</option>
-                                    <option value="1" {{$setting->openai_default_creativity == 1 ? 'selected' : ''}}>{{__('Premium')}}</option>
-                                </select>
-                            </div>
-
-                            <div class="mb-3 col-xs-12 col-md-6">
-                                <div class="form-label">{{__('Tone of Voice')}}</div>
-                                <select class="form-select" id="tone_of_voice" name="tone_of_voice" required>
-                                <option value="Professional" {{$setting->openai_default_tone_of_voice == 'Professional' ? 'selected' : null}}>{{__('Professional')}}</option>
-                                    <option value="Funny" {{$setting->opena_default_tone_of_voice == 'Funny' ? 'selected' : null}}>{{__('Funny')}}</option>
-                                    <option value="Casual" {{$setting->openai_default_tone_of_voice == 'Casual' ? 'selected' : null}}>{{__('Casual')}}</option>
-                                    <option value="Excited" {{$setting->openai_default_tone_of_voice == 'Excited' ? 'selected' : null}}>{{__('Excited')}}</option>
-                                    <option value="Witty" {{$setting->openai_default_tone_of_voice == 'Witty' ? 'selected' : null}}>{{__('Witty')}}</option>
-                                    <option value="Sarcastic" {{$setting->openai_default_tone_of_voice == 'Sarcastic' ? 'selected' : null}}>{{__('Sarcastic')}}</option>
-                                    <option value="Feminine" {{$setting->openai_default_tone_of_voice == 'Feminine' ? 'selected' : null}}>{{__('Feminine')}}</option>
-                                    <option value="Masculine" {{$setting->openai_default_tone_of_voice == 'Masculine' ? 'selected' : null}}>{{__('Masculine')}}</option>
-                                    <option value="Bold" {{$setting->openai_default_tone_of_voice == 'Bold' ? 'selected' : null}}>{{__('Bold')}}</option>
-                                    <option value="Dramatic" {{$setting->openai_default_tone_of_voice == 'Dramatic' ? 'selected' : null}}>{{__('Dramatic')}}</option>
-                                    <option value="Grumpy" {{$setting->openai_default_tone_of_voice == 'Grumpy' ? 'selected' : null}}>{{__('Grumpy')}}</option>
-                                    <option value="Secretive" {{$setting->openai_default_tone_of_voice == 'Secretive' ? 'selected' : null}}>{{__('Secretive')}}</option>
                                 </select>
                             </div>
                         @endif
@@ -299,18 +378,48 @@
 			}
 
             var formData = new FormData();
+            formData.append('post_title', '{{$openai->title}}');
             formData.append('post_type', '{{$openai->slug}}');
             formData.append('openai_id', {{$openai->id}});
             @if($openai->type == 'text')
-            formData.append('maximum_length', $("#maximum_length").val());
-            formData.append('number_of_results', $("#number_of_results").val());
-            formData.append('creativity', $("#creativity").val());
-            formData.append('tone_of_voice', $("#tone_of_voice").val());
-            formData.append('language', $("#language").val());
+                formData.append('maximum_length', $("#maximum_length").val());
+                formData.append('number_of_results', $("#number_of_results").val());
+                formData.append('creativity', $("#creativity").val());
+                formData.append('tone_of_voice', $("#tone_of_voice").val());
+                formData.append('language', $("#language").val());
+            @endif
+            @if($openai->title == 'All In One - Iteratively Build Your Article')
+                let contentType = $("#generation_type").val();
+
+                if(contentType === 'introduction') {
+                    const generatedTitle = localStorage.getItem("generatedTitle");
+                    formData.append('chosen_title', generatedTitle);
+                    formData.append('iteration_type', 'iterative_introduction');
+                }
+                else if(contentType === 'headings') {
+                    const generatedTitle = localStorage.getItem("generatedTitle");
+                    const generatedIntroduction = localStorage.getItem("generatedIntroduction");
+                    formData.append('chosen_title', generatedTitle);
+                    formData.append('chosen_intro', generatedIntroduction);
+                    formData.append('iteration_type', 'iterative_headings');
+                }
+                else if(contentType === 'article') {
+                    const generatedTitle = localStorage.getItem("generatedTitle");
+                    const generatedIntroduction = localStorage.getItem("generatedIntroduction");
+                    const generatedHeadings = localStorage.getItem("generatedHeadings");
+                    formData.append('chosen_title', generatedTitle);
+                    formData.append('chosen_intro', generatedIntroduction);
+                    formData.append('chosen_headings', generatedHeadings);
+                    formData.append('iteration_type', 'iterative_article');
+                }
+                else {
+                    formData.append('iteration_type', 'iterative_title');
+                }
             @endif
 
+
             @foreach(json_decode($openai->questions) as $question)
-            formData.append('{{$question->name}}', $("{{'#'.$question->name}}").val());
+                formData.append('{{$question->name}}', $("{{'#'.$question->name}}").val());
             @endforeach
 
             $.ajax({
@@ -343,7 +452,7 @@
                         submitBtn.disabled = false;
                     @else
 						const typingEl = document.querySelector( '.tox-edit-area > .lqd-typing' );
-                        @if($setting->hosting_type == 'high')
+                        @if($setting->hosting_type == 'high' || $openai->title == 'All In One - Iteratively Build Your Article')
                         // $("#workbook_textarea").html(data.html);
                         // if ( localStorage.getItem( "tablerTheme" ) === 'dark' ) {
                         //     tinymceOptions.skin = 'oxide-dark';
@@ -353,7 +462,14 @@
 
                         let responseText = '';
                         const message_id = data.message_id;
-                        const eventSource = new EventSource( "/dashboard/user/openai/generate?message_id=" + message_id+"&maximum_length=" + data.maximum_length + "&number_of_results=" + data.number_of_results + "&creativity=" + data.creativity);
+                        // $iteration_type = "none";
+                        // @if ($openai->title == 'All In One - Iteratively Build Your Article')
+                        //     $iteration_type = $("#generation_type").val();
+                        // @endif        $out->writeln($iteration_type);
+                        // $out = new \Symfony\Component\Console\Output\ConsoleOutput();
+                        // $out->writeln("Here");
+                        // $out->writeln("as");
+                        const eventSource = new EventSource( "/dashboard/user/openai/generate?iteration_type=" + data.iteration_type + "&message_id=" + message_id + "&maximum_length=" + data.maximum_length + "&number_of_results=" + data.number_of_results + "&creativity=" + data.creativity);
                         eventSource.onmessage = function ( e ) {
                             let txt = e.data;
 							typingEl.classList.add('lqd-is-hidden');
@@ -368,6 +484,10 @@
                             if ( txt && txt !== '[DONE]') {
                                 responseText += txt.split("/**")[0];
                                 tinyMCE.activeEditor.setContent(marked.parse(responseText), {format: 'raw'});
+                                @if($openai->title == 'All In One - Iteratively Build Your Article')
+                                    saveContext(responseText);
+                                @endif
+
                             }
                         };
                         @else
@@ -413,6 +533,135 @@
                 editor.setContent("");
             }
         }
+
+        @if($openai->title == 'All In One - Iteratively Build Your Article')
+
+            let titleGenerated = false;
+            let introGenerated = false;
+            let headingsGenerated = false;
+            let articleGenerated = false;
+
+            
+            function updateEditorContext(data) {
+                let contentType = $("#generation_type").val();
+
+                if(contentType === 'introduction' && introGenerated == false) {
+                    localStorage.setItem("generatedTitle", data);
+                }
+                else if(contentType === 'headings' && headingsGenerated == false) {
+                    localStorage.setItem("generatedIntroduction", data);
+                }
+                else if(contentType === 'article' && articleGenerated == false) {
+                    localStorage.setItem("generatedHeadings", data);
+                }
+                else {
+                    localStorage.setItem("generatedArticle", data);
+                }
+            }
+
+            function saveContext(responseData) {
+                let contentType = $("#generation_type").val();
+
+                if(contentType === 'title') {
+                    onTitleGenerated(responseData);
+                }
+                else if(contentType === 'introduction') {
+                    onIntroductionGenerated(responseData);
+                }
+                else if(contentType === 'headings') {
+                    onHeadingsGenerated(responseData);
+                }
+                else {
+                    onArticleGenerated(responseData);
+                }
+            }
+
+            function onTitleGenerated(title) {
+                localStorage.setItem("generatedTitle", title);
+                titleGenerated = true;
+                updateOptionsAvailability();
+            }
+
+            function onIntroductionGenerated(introduction) {
+                localStorage.setItem("generatedIntroduction", introduction);
+                introGenerated = true;
+                updateOptionsAvailability();
+            }
+
+            function onHeadingsGenerated(headings) {
+                localStorage.setItem("generatedHeadings", headings);
+                headingsGenerated = true;
+                updateOptionsAvailability();
+            }
+
+            function onArticleGenerated(article) {
+                localStorage.setItem("generatedArticle", headings);
+                articleGenerated = true;
+                updateOptionsAvailability();
+            }
+
+            function updateOptionsAvailability() {
+                const generationType = document.getElementById("generation_type");
+                
+                generationType.querySelectorAll("option").forEach(option => {
+                    if (option.value === "introduction" && titleGenerated) {
+                        option.disabled = false;
+                    } 
+                    if (option.value === "headings" && titleGenerated && introGenerated) {
+                        option.disabled = false;
+                    } 
+                    if (option.value === "article" && titleGenerated && introGenerated && headingsGenerated) {
+                        option.disabled = false;
+                    }
+                });
+            }
+
+            $(document).ready(function(){
+                $('#number_of_results_div, #tone_of_voice_div, #creativity_div, #maximum_length_div').hide();
+
+                $('#generation_type').change(function(){
+                    let selectedType = $(this).val();
+                    if(selectedType == 'headings'){
+                        $('#number_of_results_div').show();
+                        $('#tone_of_voice_div, #creativity_div, #maximum_length_div').hide();
+                    } 
+                    else if (selectedType == 'article') {
+                        $('#tone_of_voice_div').show();
+                        $('#number_of_results_div, #creativity_div, #maximum_length_div').hide();
+                    }
+                    else {
+                        $('#number_of_results_div, #tone_of_voice_div, #creativity_div, #maximum_length_div').hide();
+                    }
+                });
+            });
+            
+            $('#generation_type').change(function(){
+                let selectedVal = $(this).val();
+                const editor = tinyMCE.activeEditor;
+                if (editor) {
+
+                    var myContent = editor.getContent();
+                    updateEditorContext(myContent);
+                    // editor.setContent("");
+                }
+                
+                // Reset all steps to default color
+                $('#step_title span:first-child, #step_intro span:first-child, #step_headings span:first-child, #step_article span:first-child').css('background-color', '#e0e0e0');
+
+                // Update colors based on selected generation type
+                if (selectedVal == 'title') {
+                    $('#step_title span:first-child').css('background-color', '#330582');
+                } else if (selectedVal == 'introduction') {
+                    $('#step_title span:first-child, #step_intro span:first-child').css('background-color', '#330582');
+                } else if (selectedVal == 'headings') {
+                    $('#step_title span:first-child, #step_intro span:first-child, #step_headings span:first-child').css('background-color', '#330582');
+                } else if (selectedVal == 'article') {
+                    $('#step_title span:first-child, #step_intro span:first-child, #step_headings span:first-child, #step_article span:first-child').css('background-color', '#330582');
+                }
+            });
+
+        @endif
+
 
     </script>
 
