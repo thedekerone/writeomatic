@@ -102,7 +102,8 @@ class AIController extends Controller
                 $chosen_intro = $request->chosen_intro;
                 $your_description = $request['description'];
                 $your_keywords = $request['keywords'];
-                $prompt = "I'm looking for $number_of_results main headings for an article with these details:\n";
+                $prompt = "Write properly formatted headings for an article with these details (include the standard headings like intro, conclusion etc aswell, adjust their font sizes and everything must be formatted):\n";
+                $prompt .= "- Just generate headings.\n";
                 $prompt .= "- Title of the article: '$chosen_title'\n";
                 $prompt .= "- Introduction of the article: '$chosen_intro'\n";
                 $prompt .= "- The article's main topic or theme: '$your_description'\n";
