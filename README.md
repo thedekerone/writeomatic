@@ -12,10 +12,10 @@ Welcome to `Writeomatic.app`, a web application powered by the Laravel framework
 
 ## 🔧 Prerequisites
 
-1. PHP >= 7.4
+1. PHP >= 8.1
 2. [Composer](https://getcomposer.org/) - PHP's dependency manager.
 3. Laravel CLI
-4. MySQL (or your preferred database)
+4. MySQL (Create a SQL export from the host and import it locally to ur SQL, as there seems to be an issue with the migrations and seeders currently)
 5. A web server (like Apache or Nginx) or you can use Laravel's built-in server.
 
 ## 📦 Installation
