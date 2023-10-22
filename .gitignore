@@ -15,8 +15,6 @@ app/storage/ # From Laravel 4
 .env.*.php
 .env.php
 
-# Local Env Changes
-AppServiceProvider.php
 
 # Laravel-specific
 .phpunit.result.cache

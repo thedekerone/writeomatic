@@ -57,6 +57,9 @@ class AppServiceProvider extends ServiceProvider
             if ($this->app->environment('production')) {
                 \URL::forceScheme('https');
             }
+            else if ($this->app->environment('local')) {
+                \URL::forceScheme('http');
+            }
 
             app()->useLangPath(base_path('lang'));
             if (Schema::hasTable('migrations')) {
