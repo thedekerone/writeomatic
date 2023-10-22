@@ -95,6 +95,7 @@ class AIController extends Controller
                 $prompt .= "- The article title is: '$chosen_title'\n";
                 $prompt .= "- The article will discuss or focus on: '$your_description'\n";
                 $prompt .= "- Keywords to include: $your_keywords\n";
+                $prompt .= "- Use the $language language\n";
             }
             
             if ($iteration_type == 'iterative_headings') {
@@ -102,12 +103,13 @@ class AIController extends Controller
                 $chosen_intro = $request->chosen_intro;
                 $your_description = $request['description'];
                 $your_keywords = $request['keywords'];
-                $prompt = "Write properly formatted headings for an article with these details (include the standard headings like intro, conclusion etc aswell, adjust their font sizes and everything must be formatted):\n";
+                $prompt = "I'm looking for properly formatted headings for an article with these details (be creative with the headings, include the standard headings like intro conclusion etc headings aswell, adjust their font sizes and everything must be formatted):\n";
                 $prompt .= "- Just generate headings.\n";
                 $prompt .= "- Title of the article: '$chosen_title'\n";
                 $prompt .= "- Introduction of the article: '$chosen_intro'\n";
                 $prompt .= "- The article's main topic or theme: '$your_description'\n";
                 $prompt .= "- Important keywords: $your_keywords\n";
+                $prompt .= "- Use the $language language\n";
             }
             
             if ($iteration_type == 'iterative_article') {
@@ -116,7 +118,7 @@ class AIController extends Controller
                 $chosen_headings = $request->chosen_headings;
                 $your_description = $request['description'];
                 $your_keywords = $request['keywords'];
-                $prompt = "Write a properly formatted article using the following details:\n";
+                $prompt = "Write a properly formatted article using the following details (adjust font sizes for headings and everything must be formatted):\n";
                 $prompt .= "- Title: '$chosen_title'\n";
                 $prompt .= "- Introduction: '$chosen_intro'\n";
                 $prompt .= "- Main Headings: $chosen_headings\n";
@@ -390,8 +392,7 @@ class AIController extends Controller
         }
         
         $post = OpenAIGenerator::where('slug', $post_type)->first();
-        $out = new \Symfony\Component\Console\Output\ConsoleOutput();
-        $out->writeln($post);
+
         if ($post->custom_template == 1 && $post_title != 'All In One - Iteratively Build Your Article') {
             $custom_template = OpenAIGenerator::where('id', $request->openai_id)->first();
             $prompt = $custom_template->prompt;
@@ -433,7 +434,6 @@ class AIController extends Controller
         $iteration_type = $request->iteration_type;
 
 
-        //$out->writeln($iteration_type);
         $creativity = $request->creativity;
         $maximum_length = $request->maximum_length;
         $number_of_results = $request->number_of_results;
