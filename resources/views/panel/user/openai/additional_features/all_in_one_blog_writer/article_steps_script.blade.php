@@ -1,3 +1,4 @@
+<script>
 let titleGenerated = false;
 let introGenerated = false;
 let headingsGenerated = false;
@@ -40,24 +41,31 @@ function onTitleGenerated(title) {
     localStorage.setItem("generatedTitle", title);
     titleGenerated = true;
     updateStepAvailability();
+    updateButtonVisibility();
 }
 
 function onIntroductionGenerated(introduction) {
     localStorage.setItem("generatedIntroduction", introduction);
     introGenerated = true;
     updateStepAvailability();
+    updateButtonVisibility();
+
 }
 
 function onHeadingsGenerated(headings) {
     localStorage.setItem("generatedHeadings", headings);
     headingsGenerated = true;
     updateStepAvailability();
+    updateButtonVisibility();
+
 }
 
 function onArticleGenerated(article) {
     localStorage.setItem("generatedArticle", article);
     articleGenerated = true;
     updateStepAvailability();
+    updateButtonVisibility();
+
 }
 
 function loadContextToEditor() {
@@ -156,58 +164,118 @@ function updateStepAvailability() {
         $('#step_article').addClass('step-completed');
     }
 }
+function changeActiveStep(elem) {
+    if ($(elem).hasClass('disabled-step')) {
+        return;
+    }
+    const previousStep = $('.clickable-step.active').attr('id');
+
+    $('.clickable-step').removeClass('active');
+    $(elem).addClass('active');
+    let type = getActiveStepType();
+    // Logic for showing/hiding divs
+    if (type == 'article') {
+        $('#tone_of_voice_div').show();
+        $('#number_of_results_div, #creativity_div, #maximum_length_div').hide();
+    } else if (type == 'title') {
+        $('#language_div').show();
+        $('#number_of_results_div, #tone_of_voice_div, #creativity_div, #maximum_length_div').hide();
+    } else {
+        $('#number_of_results_div, #tone_of_voice_div, #creativity_div, #maximum_length_div, #language_div').hide();
+    }
+
+    // Logic to handle content
+    const editor = tinyMCE.activeEditor;
+    if (editor) {
+        // toastr.info(previousStep);
+        let myContent = editor.getContent();
+        saveContextFromEditor(myContent, previousStep);
+
+        editor.setContent(loadContextToEditor());
+    }
+
+    // Update UI based on selected value
+    $('#step_title span:first-child, #step_intro span:first-child, #step_headings span:first-child, #step_article span:first-child').css('background-color', '#e0e0e0');
+    if (type == 'title') {
+        $('#step_title span:first-child').css('background-color', '#330582');
+    } else if (type == 'introduction') {
+        $('#step_title span:first-child, #step_intro span:first-child').css('background-color', '#330582');
+    } else if (type == 'headings') {
+        $('#step_title span:first-child, #step_intro span:first-child, #step_headings span:first-child').css('background-color', '#330582');
+    } else if (type == 'article') {
+        $('#step_title span:first-child, #step_intro span:first-child, #step_headings span:first-child, #step_article span:first-child').css('background-color', '#330582');
+    }
+    updateButtonVisibility();
+}
+
+function updateButtonVisibility() {
+    const activeStep = getActiveStepType();
+    if (activeStep === 'title' && titleGenerated == false) {
+        $("#previous_button").hide();
+        $("#next_button").hide();
+        $("#openai_generator_button").show();
+    } else if (activeStep === 'title' && titleGenerated == true){
+        $("#previous_button").hide();
+        $("#next_button").show();
+        $("#openai_generator_button").hide();
+    } else if (activeStep === 'introduction' && introGenerated == false) {
+        $("#previous_button").show();
+        $("#next_button").hide();
+        $("#openai_generator_button").show();
+    } else if (activeStep === 'introduction' && introGenerated == true){
+        $("#previous_button").show();
+        $("#next_button").show();
+        $("#openai_generator_button").hide();
+    } else if (activeStep === 'headings' && headingsGenerated == false) {
+        $("#previous_button").show();
+        $("#next_button").hide();
+        $("#openai_generator_button").show();
+    } else if (activeStep === 'headings' && headingsGenerated == true){
+        $("#previous_button").show();
+        $("#next_button").show();
+        $("#openai_generator_button").hide();
+    } else if (activeStep === 'article' && articleGenerated == false) {
+        $("#previous_button").show();
+        $("#next_button").hide();
+        $("#openai_generator_button").show();
+    } else if (activeStep === 'article' && articleGenerated == true){
+        $("#previous_button").show();
+        $("#next_button").hide();
+        $("#openai_generator_button").hide();
+    }      
+}
 
 $(document).ready(function() {
+
     // Initial setup
     $('#number_of_results_div, #tone_of_voice_div, #creativity_div, #maximum_length_div').hide();
     let previousStep = null; // Variable to track the previous step
 
     // Clickable steps logic
+    initializePopover('keywords');
+
     $(".clickable-step").click(function() {
-        if ($(this).hasClass('disabled-step')) {
-            return;
-        }
-        previousStep = $('.clickable-step.active').attr('id');
-
-
-        $('.clickable-step').removeClass('active');
-
-        // Mark the clicked step as active
-        $(this).addClass('active');
-        
-        let type = getActiveStepType();
-        // Logic for showing/hiding divs
-        if (type == 'article') {
-            $('#tone_of_voice_div').show();
-            $('#number_of_results_div, #creativity_div, #maximum_length_div').hide();
-        } else if (type == 'title') {
-            $('#language_div').show();
-            $('#number_of_results_div, #tone_of_voice_div, #creativity_div, #maximum_length_div').hide();
-        } else {
-            $('#number_of_results_div, #tone_of_voice_div, #creativity_div, #maximum_length_div, #language_div').hide();
-        }
-
-        // Logic to handle content
-        const editor = tinyMCE.activeEditor;
-        if (editor) {
-            // toastr.info(previousStep);
-            let myContent = editor.getContent();
-            saveContextFromEditor(myContent, previousStep);
-
-            editor.setContent(loadContextToEditor());
-        }
-
-        // Update UI based on selected value
-        $('#step_title span:first-child, #step_intro span:first-child, #step_headings span:first-child, #step_article span:first-child').css('background-color', '#e0e0e0');
-        if (type == 'title') {
-            $('#step_title span:first-child').css('background-color', '#330582');
-        } else if (type == 'introduction') {
-            $('#step_title span:first-child, #step_intro span:first-child').css('background-color', '#330582');
-        } else if (type == 'headings') {
-            $('#step_title span:first-child, #step_intro span:first-child, #step_headings span:first-child').css('background-color', '#330582');
-        } else if (type == 'article') {
-            $('#step_title span:first-child, #step_intro span:first-child, #step_headings span:first-child, #step_article span:first-child').css('background-color', '#330582');
-        }
+        changeActiveStep(this);
 
     });
+    $("#next_button").click(function(event) {
+        event.preventDefault(); // Prevent form submission
+        const nextStep = $('.clickable-step.active').next('.clickable-step');
+        if (nextStep.length) {
+            changeActiveStep(nextStep);
+        }
+    });
+
+    $("#previous_button").click(function(event) {
+        event.preventDefault(); // Prevent form submission
+        const prevStep = $('.clickable-step.active').prev('.clickable-step');
+        if (prevStep.length) {
+            changeActiveStep(prevStep);
+        }
+    });
+    updateButtonVisibility();
+
+
+
 });
+</script>

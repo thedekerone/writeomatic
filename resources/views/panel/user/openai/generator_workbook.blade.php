@@ -33,6 +33,102 @@
     opacity: 0.5;
 }
 
+
+.custom-button-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.button-wrapper {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+
+.custom-btn {
+    height: 90%;
+    width: 100%;
+    padding: 0.5em 0.75em;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    border-radius: 1.5rem;
+    transition: all 0.2s;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+#previous_button {
+    background-color: transparent;
+    border: 2px solid #330582;
+    color: #330582;
+}
+
+#previous_button:hover {
+    background-color: #330582;
+    color: #fff;
+}
+
+#next_button {
+    background-color: #330582;
+    color: #fff;
+    border: 2px solid #330582;
+    padding-left: 10px;
+
+
+}
+
+#next_button:hover {
+    transform: scale(1.05);
+}
+
+/* Dividing line */
+.next-button-wrapper::before {
+    content: "";
+    width: 1px;
+    background-color: #FFFFFF;
+    height: 70%;
+    position: absolute;
+    right: 42px;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: all 0.2s;
+    z-index: 1;
+}
+
+
+.next-button-wrapper:hover::before {
+    transform: translateY(-50%);
+}
+
+/* Refresh Icon */
+.refresh-btn {
+    background: none;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.6rem;
+    transition: all 0.2s;
+
+}
+
+.refresh-btn:hover {
+    transform: scale(1.1) translateY(-50%);
+}
+
+
+.next-button-wrapper:hover {
+    color: #5D389C;
+}
+
+
 </style>
 @endsection
 
@@ -180,12 +276,35 @@
 
                         @endif
 
-						<div class="col-xs-12 mt-[10px]">
-							<button id="openai_generator_button" class="btn btn-primary w-100 py-[0.75em] flex items-center group" type="submit">
-								<span class="hidden group-[.lqd-form-submitting]:inline-flex">{{__('Please wait...')}}</span>
-								<span class="group-[.lqd-form-submitting]:hidden">{{__('Generate')}}</span>
-							</button>
-						</div>
+
+
+                        @if($openai->title == 'All In One - Iteratively Build Your Article')
+
+                            <div class="col-xs-12 mt-[10px]">
+                                <button id="openai_generator_button" class="btn btn-primary w-100 py-[0.75em] flex items-center group" type="submit">
+                                    <span class="hidden group-[.lqd-form-submitting]:inline-flex">{{__('Please wait...')}}</span>
+                                    <span class="group-[.lqd-form-submitting]:hidden">{{__('Generate')}}</span>
+                                </button>
+                            </div>
+
+                            <div class="col-xs-12 mt-[10px] custom-button-container">
+                                <div class="button-wrapper">
+                                    <button id="previous_button" class="custom-btn" type="submit">Previous</button>
+                                </div>
+                                
+                                <div class="button-wrapper next-button-wrapper">
+                                    <button id="next_button" class="custom-btn" type="submit">Next</button>
+                                    <button class="refresh-btn">🗘</button>
+                                </div>
+                            </div>
+                        @else
+                            <div class="col-xs-12 mt-[10px]">
+                                <button id="openai_generator_button" class="btn btn-primary w-100 py-[0.75em] flex items-center group" type="submit">
+                                    <span class="hidden group-[.lqd-form-submitting]:inline-flex">{{__('Please wait...')}}</span>
+                                    <span class="group-[.lqd-form-submitting]:hidden">{{__('Generate')}}</span>
+                                </button>
+                            </div>
+                        @endif
 
                     </form>
                 </div>
@@ -467,11 +586,11 @@
             }
         }
 
-        @if($openai->title == 'All In One - Iteratively Build Your Article')
-            @include('panel.user.openai.additional_features.all_in_one_blog_writer.article_steps_script')
-        @endif
+
 
 
     </script>
-
+    @if($openai->title == 'All In One - Iteratively Build Your Article')
+        @include('panel.user.openai.additional_features.all_in_one_blog_writer.article_steps_script')
+    @endif
 @endsection

@@ -1,3 +1,5 @@
+@include('panel.user.openai.components.keywordPopoverContent')
+
 <div class="mb-3 col-xs-12 col-md-6" id="maximum_length_div" style="display: none;">
     <label class="form-label">{{__('Maximum Length')}}</label>
     <input type="number" class="form-control" id="maximum_length" name="maximum_length" max="{{$setting->openai_max_output_length}}" value="400" placeholder="{{__('Maximum character length of text')}}" required>
