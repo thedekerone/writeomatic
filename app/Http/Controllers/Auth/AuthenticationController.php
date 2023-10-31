@@ -148,17 +148,7 @@ class AuthenticationController extends Controller
 
     public function registerStore(Request $request)
     {
-        $trustedEmailProviders = [
-            'gmail.com',
-            'yahoo.com',
-            'hotmail.com',
-            'outlook.com',
-            'icloud.com',
-            'aol.com',
-            'protonmail.com',
-            'zoho.com',
-            'mail.com',
-        ];
+
 
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
@@ -166,15 +156,7 @@ class AuthenticationController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Password::defaults()],
         ]);
-        $emailDomain = substr(strrchr($request->email, "@"), 1);
 
-        if (!in_array($emailDomain, $trustedEmailProviders)) {
-            $data = array(
-                'errors' => ['Non Trusted Email Provider'],
-                'type' => 'error',
-            );
-            return response()->json($data, 401);
-        }
         $affCode = null;
         if ($request->affiliate_code != null) {
             $affUser = User::where('affiliate_code', $request->affiliate_code)->first();
