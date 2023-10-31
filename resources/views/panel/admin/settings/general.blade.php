@@ -342,6 +342,10 @@
 							<input class="form-check-input" type="checkbox" id="feature_affilates" {{ $setting->feature_affilates ? 'checked' : '' }}>
 							<span class="form-check-label">{{ __('Affilates') }}</span>
 						</label>
+						<label class="form-check form-switch">
+							<input class="form-check-input" type="checkbox" id="feature_ai_article_wizard" {{ $setting->feature_ai_article_wizard ? 'checked' : '' }}>
+							<span class="form-check-label">{{ __('Article Wizard') }}</span>
+						</label>
 					</div>
 				</div>
 
