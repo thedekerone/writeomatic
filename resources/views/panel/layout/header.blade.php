@@ -98,6 +98,25 @@
 						</a>
 					</li>
 					@endif
+					@if ( $setting->feature_ai_article_wizard )
+					<li class="nav-item">
+						<a class="nav-link {{ route('dashboard.user.openai.articlewizard.new') == url()->current() ? 'active' : '' }}" href="{{route('dashboard.user.openai.articlewizard.new')}}">
+							<span class="nav-link-icon">
+								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+									<path d="M11.933,5H5V21H18V13" />
+									<path d="M14,17H9"/>
+									<path d="M9,13h5V9H9Z"/>
+									<path d="M15,5V3"/>
+									<path d="M18,6l2-2"/>
+									<path d="M19,9h2"/>
+								</svg>
+							</span>
+							<span class="flex items-center transition-[opacity,transform] nav-link-title grow">
+								{{__('AI Article Wizard')}}
+							</span>
+						</a>
+					</li>
+					@endif
 					@if ( $setting->feature_ai_chat )
 					<li class="nav-item">
 						<a class="nav-link {{ route('dashboard.user.openai.chat.list') == url()->current() ? 'active' : '' }}" href="{{route('dashboard.user.openai.chat.list')}}">

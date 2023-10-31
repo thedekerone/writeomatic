@@ -15,13 +15,13 @@ document.addEventListener("DOMContentLoaded", function() {
             'sort-score',
             { attr: 'data-date', name: 'sort-date' },
         ],
-        page: 25,
-        pagination: {
-            innerWindow: 1,
-            left: 0,
-            right: 0,
-            paginationClass: "pagination",
-        },
+        // page: 25,
+        // pagination: {
+        //     innerWindow: 1,
+        //     left: 0,
+        //     right: 0,
+        //     paginationClass: "pagination",
+        // },
     });
 })
 function userSave( user_id ) {

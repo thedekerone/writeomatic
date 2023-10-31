@@ -4,6 +4,7 @@ use App\Models\Setting;
 use App\Http\Controllers\AdvertisController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AIArticleWizardController;
 use App\Http\Controllers\Dashboard\AdminController;
 use App\Http\Controllers\Dashboard\UserController;
 use App\Http\Controllers\Dashboard\IntegrationController;
@@ -107,6 +108,23 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
 
                         //Low systems
                         Route::post('/low/chat_save', [AIChatController::class, 'lowChatSave']);
+                    });
+                });
+
+
+                Route::middleware('hasTokens')->group(function () {
+                    Route::prefix('articlewizard')->name('articlewizard.')->group(function () {
+                        Route::get('/new', [AIArticleWizardController::class, 'newArticle'])->name('new');
+                        Route::get('/genarticle', [AIArticleWizardController::class, 'generateArticle'])->name('genarticle');
+                        Route::post('/update', [AIArticleWizardController::class, 'updateArticle'])->name('update');
+                        Route::post('/clear', [AIArticleWizardController::class, 'clearArticle'])->name('clear');
+                        Route::post('/genkeywords', [AIArticleWizardController::class, 'generateKeywords'])->name('genkeywords');
+                        Route::post('/gentitles', [AIArticleWizardController::class, 'generateTitles'])->name('gentitles');
+                        Route::post('/genoutlines', [AIArticleWizardController::class, 'generateOutlines'])->name('genoutlines');
+                        Route::post('/genimages', [AIArticleWizardController::class, 'generateImages'])->name('genimages');
+                        Route::post('/remains', [AIArticleWizardController::class, 'userRemaining'])->name('remains');
+                        Route::get('/{uid}', [AIArticleWizardController::class, 'editArticle'])->name('edit');
+                        Route::resource('/', AIArticleWizardController::class);
                     });
                 });
             });
