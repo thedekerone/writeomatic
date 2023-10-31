@@ -99,7 +99,7 @@
 					</li>
 					@endif
 					@if ( $setting->feature_ai_article_wizard )
-					<li class="nav-item">
+					<li class="nav-item" style="display: none;">
 						<a class="nav-link {{ route('dashboard.user.openai.articlewizard.new') == url()->current() ? 'active' : '' }}" href="{{route('dashboard.user.openai.articlewizard.new')}}">
 							<span class="nav-link-icon">
 								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">

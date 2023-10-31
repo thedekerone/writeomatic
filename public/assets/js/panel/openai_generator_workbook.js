@@ -38,10 +38,14 @@ const tinymceOptions = {
 				return;
 			}
 			if ( tinymce?.activeEditor ) {
-				tinymce.activeEditor.execCommand( 'selectAll', true );
-				const content = tinymce.activeEditor.selection.getContent( { format: 'html' } );
-				navigator.clipboard.writeText( content );
-				toastr.success( 'Content copied to clipboard' );
+				let content = tinymce.activeEditor.selection.getContent( { format: 'html' } );
+				if(!content) {
+					tinymce.activeEditor.execCommand( 'selectAll', true );
+					content = tinymce.activeEditor.selection.getContent( { format: 'html' } );
+				}
+				let sanitizedContent = content.replace(/<\/?[^>]+(>|$)/g, "");
+				navigator.clipboard.writeText(sanitizedContent);
+				toastr.success('Content copied to clipboard');
 				return;
 			}
 		} );

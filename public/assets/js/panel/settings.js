@@ -338,7 +338,7 @@ function generalSettingsSave() {
     formData.append( 'feature_ai_speech_to_text', $( "#feature_ai_speech_to_text" ).is(":checked") ? 1 : 0 );
     formData.append( 'feature_ai_voiceover', $( "#feature_ai_voiceover" ).is(":checked") ? 1 : 0 );
     formData.append( 'feature_affilates', $( "#feature_affilates" ).is(":checked") ? 1 : 0 );
-    formData.append( 'feature_ai_article_wizard', $( "#feature_ai_article_wizard" ).is(":checked") ? 1 : 0 );
+
 	$.ajax( {
 		type: "post",
 		url: "/dashboard/admin/settings/general-save",
@@ -505,40 +505,6 @@ function stablediffusionSettingsSave() {
 			document.getElementById( "settings_button" ).innerHTML = "Save";
 		},
 		error: function ( data ) {
-			var err = data.responseJSON.errors;
-			$.each( err, function ( index, value ) {
-				toastr.error( value );
-			} );
-			document.getElementById( "settings_button" ).disabled = false;
-			document.getElementById( "settings_button" ).innerHTML = "Save";
-		}
-	} );
-	return false;
-}
-
-function unsplashSettingsSave() {
-	"use strict";
-
-	document.getElementById( "settings_button" ).disabled = true;
-	document.getElementById( "settings_button" ).innerHTML = magicai_localize.please_wait;
-
-	var formData = new FormData();
-	formData.append( 'unsplash_api_key', $( "#unsplash_api_key" ).val() );
-	// formData.append( 'stablediffusion_default_language', $( "#stablediffusion_default_language" ).val() );
-	// formData.append( 'stablediffusion_default_model', $( "#stablediffusion_default_model" ).val() );
-
-	$.ajax( {
-	    type: "post",
-	 	url: "/dashboard/admin/settings/unsplashapi-save",
-	 	data: formData,
-	 	contentType: false,
-	 	processData: false,
-	 	success: function ( data ) {
-	 		toastr.success( 'Settings saved succesfully.' );
-	 		document.getElementById( "settings_button" ).disabled = false;
-	 		document.getElementById( "settings_button" ).innerHTML = "Save";
-	 	},
-	 	error: function ( data ) {
 			var err = data.responseJSON.errors;
 			$.each( err, function ( index, value ) {
 				toastr.error( value );

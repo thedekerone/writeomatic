@@ -30,7 +30,7 @@ const generate = async ( message_no, creativity, maximum_length, number_of_resul
 		const text = chunk.shift();
 		if ( text ) {
 			result += text;
-			tinyMCE.activeEditor.setContent( result, { format: 'raw' } );
+			tinyMCE.activeEditor.setContent( marked.parse(result), { format: 'raw' } );
 			typingEl?.classList?.add( 'lqd-is-hidden' );
 		}
 	}, 20 );
@@ -41,7 +41,7 @@ const generate = async ( message_no, creativity, maximum_length, number_of_resul
 		eventSource.addEventListener( 'data', function ( event ) {
 			const data = JSON.parse( event.data );
 			if ( data.message !== null ) {
-				chunk.push( data.message.replace( /(?:\r\n|\r|\n)/g, ' <br> ' ) );
+				chunk.push( data.message );
 			}
 		} );
 
@@ -124,7 +124,7 @@ const generate = async ( message_no, creativity, maximum_length, number_of_resul
 					const { content } = delta;
 
 					if (content) {
-						chunk.push( content.replace( /(?:\r\n|\r|\n)/g, ' <br> ' ) );
+						chunk.push( content );
 					}
 				}
 			}
