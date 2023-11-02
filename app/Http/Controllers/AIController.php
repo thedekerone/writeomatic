@@ -744,7 +744,6 @@ class AIController extends Controller
                 //send prompt to openai
                 if($prompt == null) return response()->json(["status" => "error", "message" => "You must provide a prompt"]);
                 $response = FacadesOpenAI::images()->create([
-                    'model' => 'image-alpha-001',
                     'prompt' => $prompt,
                     'size' => $size,
                     'response_format' => 'b64_json',

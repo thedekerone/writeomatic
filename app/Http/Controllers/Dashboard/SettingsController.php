@@ -167,7 +167,41 @@ class SettingsController extends Controller
     public function stablediffusion(){
         return view('panel.admin.settings.stablediffusion');
     }
+    public function unsplashapi(Request $request){
+        $token = "";
+        return view('panel.admin.settings.unsplashapi');
+    }
 
+    public function unsplashapiTest(){
+        $client = new Client();
+        $settings = SettingTwo::first();
+        if ($settings->unsplash_api_key == "") {
+            echo "You must provide Unsplash API Key.";
+            return;
+        }
+
+        $apiKey = $settings->unsplash_api_key;
+
+        $client = new Client();
+
+        try {
+            $response = $client->get("https://api.unsplash.com/search/photos?query=Google&count=1&client_id=$apiKey");
+            echo ' <br>'.$apiKey.' - SUCCESS <br>';
+        } catch (\Exception $e) {
+            echo $e->getMessage().' - '.$apiKey.' -FAILED <br>';
+        }
+    }
+
+    public function unsplashapiSave(Request $request) {
+        $settings = SettingTwo::first();
+        // TODO SETTINGS
+        if (env('APP_STATUS') != 'Demo'){
+            $settings->unsplash_api_key = $request->unsplash_api_key;
+            $settings->save();
+        }
+        return response()->json([], 200);
+    }
+    
     public function openaiTest(){
         $client = new Client();
         $settings = Setting::first();

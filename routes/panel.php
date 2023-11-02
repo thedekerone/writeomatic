@@ -303,6 +303,10 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
                 Route::get('/stablediffusion/test', [SettingsController::class, 'stablediffusionTest'])->name('stablediffusion.test');
                 Route::post('/stablediffusion-save', [SettingsController::class, 'stablediffusionSave']);
 
+                Route::get('/unsplashapi', [SettingsController::class, 'unsplashapi'])->name('unsplashapi');
+                Route::get('/unsplashapi/test', [SettingsController::class, 'unsplashapiTest'])->name('unsplashapi.test');
+                Route::post('/unsplashapi-save', [SettingsController::class, 'unsplashapiSave']);
+
                 Route::get('/tts', [SettingsController::class, 'tts'])->name('tts');
                 Route::post('/tts-save', [SettingsController::class, 'ttsSave']);
 

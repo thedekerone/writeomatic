@@ -7,6 +7,7 @@
 /bootstrap/cache/
 /bootstrap/compiled.php # From Laravel 4
 app/storage/ # From Laravel 4
+/public/uploads/
 
 # Laravel Environment File & Variants
 .env

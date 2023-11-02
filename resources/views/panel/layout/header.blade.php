@@ -437,6 +437,9 @@
 								<a class="dropdown-item {{activeRoute('dashboard.admin.settings.stablediffusion')}}" href="{{route('dashboard.admin.settings.stablediffusion')}}">
                                     {{__('StableDiffusion')}}
                                 </a>
+								<a class="dropdown-item {{activeRoute('dashboard.admin.settings.unsplashapi')}}" href="{{route('dashboard.admin.settings.unsplashapi')}}">
+                                    {{__('Unsplash API')}}
+                                </a>
                                 <a class="dropdown-item {{activeRoute('dashboard.admin.settings.tts')}}" href="{{route('dashboard.admin.settings.tts')}}">
                                     {{__('Google TTS')}}
                                 </a>
