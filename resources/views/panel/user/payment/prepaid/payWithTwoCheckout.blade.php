@@ -29,31 +29,24 @@
             <h2 class="text-danger">{{ $exception }}</h2>
         @else
         <div class="row row-cards">
-            <div class=" text-center">
-                <div class="row d-flex justify-content-center text-center">
-                    <div class="" style="width: 360px;">
-                        <div id="twocheckout-button-container"></div>
-                    </div>
-                    <p class="mt-3">{{__('By purchase you confirm our')}} <a href="{{ url('/').'/terms' }}">{{__('Terms and Conditions')}}</a> </p>
-                </div>
-            </div>
-            <div class="row justify-content-md-center mt-3">
+            <div class="row justify-content-md-center mt-5">
                 <div class="col-12">
                   <div class="card">
                     <div class="card-body">
-                        <form type="post" id="payment-form" action="{{ route('dashboard.user.payment.twocheckoutPrepaidPay') }}">
-                            @csrf
-                            <div class="form-group">
-                                <label for="name" class="label control-label">{{__('Name')}}</label>
-                                <input type="text" id="name" class="field form-control">
-                            </div>
+                      <h5 class="card-title">Basic implementation for the 2Pay.js client</h5>
+                        
+                      <form type="post" id="payment-form" action="{{ route('dashboard.user.payment.twocheckoutPrepaidPay') }}">
+                        <div class="form-group">
+                          <label for="name" class="label control-label">Name</label>
+                          <input type="text" id="name" class="field form-control">
+                        </div>
             
-                            <div id="card-element">
-                            <!-- A TCO IFRAME will be inserted here. -->
-                            </div>
+                        <div id="card-element">
+                          <!-- A TCO IFRAME will be inserted here. -->
+                        </div>
                         {{-- <input id="token" name="token" type="hidden" value=""> --}}
-                            <button class="btn btn-primary" type="submit">{{__('Pay with 2checkout')}}</button>
-                        </form>
+                        <button class="btn btn-primary" type="submit">Pay with 2checkout</button>
+                      </form>
                     </div>
                   </div>
                 </div>
@@ -67,27 +60,22 @@
                     @endif
                     <div class="card-body flex flex-col !p-[45px_50px_50px] text-center">
                         <div class="text-heading flex items-end justify-center mt-0 mb-[15px] w-full text-[60px] leading-none">
-							@if(currencyShouldDisplayOnRight(currency()->symbol))
-                            {{$plan->price}}
-                            <small class="inline-flex mb-[0.3em] font-normal text-[0.35em]">{{currency()->symbol}}</small>
-                            @else
-                            <small class="inline-flex mb-[0.3em] font-normal text-[0.35em]">{{currency()->symbol}}</small>
+							<small class="inline-flex mb-[0.3em] font-normal text-[0.35em]">{{currency()->symbol}}</small>
 							{{$plan->price}}
-                            @endif
 							<small class="inline-flex mb-[0.3em] font-normal text-[0.35em]">/ {{__('One time')}}</small>
 						</div>
 						<div class="inline-flex mx-auto p-[0.85em_1.2em] bg-white rounded-full font-medium text-[15px] leading-none text-[#2D3136]">{{$plan->name}}</div>
 
-                        <ul class="list-unstyled mt-[35px] text-[15px] mb-[25px] mx-auto w-fit">
-                            <li class="mb-[0.625em] text-left">
+                        <ul class="list-unstyled mt-[35px] text-[15px] mb-[25px]">
+                            <li class="mb-[0.625em]">
 								<span class="inline-flex items-center justify-center w-[19px] h-[19px] mr-1 bg-[rgba(28,166,133,0.15)] text-green-500 rounded-xl align-middle">
 									<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l5 5l10 -10" /></svg>
 								</span>
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon me-1 text-success" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l5 5l10 -10" /></svg>
-                                {{__('Access')}} <strong>{{__($plan->plan_type)}}</strong> {{__('Templates')}}
+                                {{__('Access')}} <strong>{{$plan->plan_type}}</strong> {{__('Templates')}}
                             </li>
                             @foreach(explode(',', $plan->features) as $item)
-                            <li class="mb-[0.625em] text-left">
+                            <li class="mb-[0.625em]">
 								<span class="inline-flex items-center justify-center w-[19px] h-[19px] mr-1 bg-[rgba(28,166,133,0.15)] text-green-500 rounded-xl align-middle">
 									<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l5 5l10 -10" /></svg>
 								</span>
@@ -96,25 +84,17 @@
                             </li>
                             @endforeach
 
-                            <li class="mb-[0.625em] text-left">
+                            <li class="mb-[0.625em]">
 								<span class="inline-flex items-center justify-center w-[19px] h-[19px] mr-1 bg-[rgba(28,166,133,0.15)] text-green-500 rounded-xl align-middle">
 									<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l5 5l10 -10" /></svg>
 								</span>
-                                @if((int)$plan->total_words >= 0)
                                 <strong>{{number_format($plan->total_words)}}</strong> {{__('Word Tokens')}}
-                            @else
-                                <strong>{{__('Unlimited')}}</strong> {{__('Word Tokens')}}
-                            @endif
                             </li>
-                            <li class="mb-[0.625em] text-left">
+                            <li class="mb-[0.625em]">
 								<span class="inline-flex items-center justify-center w-[19px] h-[19px] mr-1 bg-[rgba(28,166,133,0.15)] text-green-500 rounded-xl align-middle">
 									<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l5 5l10 -10" /></svg>
 								</span>
-                                @if((int)$plan->total_images >= 0)
-                                    <strong>{{number_format($plan->total_images)}}</strong> {{__('Image Tokens')}}
-                                @else
-                                    <strong>{{__('Unlimited')}}</strong> {{__('Image Tokens')}}
-                                @endif
+                                <strong>{{number_format($plan->total_images)}}</strong> {{__('Image Tokens')}}
                             </li>
 
                         </ul>
@@ -158,34 +138,25 @@
             // and the billing details as the second one
             jsPaymentClient.tokens.generate(component, billingDetails).then((response) => {
                 // myForm.token.value = response.token;
+                console.log(response.token);
                 var formData = new FormData();
                 formData.append( 'token', response.token );
                 formData.append( 'plan', '{!!$planId!!}' );
-                document.querySelector('.card-body button').disabled=true;
+
                 $.ajax( {
                     type: "post",
-                    headers: {
-                        'X-CSRF-TOKEN': "{{ csrf_token() }}",
-                    },
                     url: "/dashboard/user/payment/twocheckout/prepaidPay",
                     data: formData,
                     contentType: false,
                     processData: false,
                     success: function ( data ) {
-                        document.querySelector('.card-body button').disabled=false;
-                        if (data['status'] == 'error')
-                            toastr.error(data['message']);
-                        else {
-                            const element = document.getElementById('twocheckout-button-container');
-                            element.innerHTML = '<h3>{{__("Thank you for your payment!")}}</h3>';
-                            setTimeout( function () {
-                                location.href = '/dashboard';
-                            }, 1000 );
-                        }
+                        console.log(data);
+                        toastr.success( data.message );
                     },
                     error: function ( data ) {
                         var err = data.responseJSON.errors;
-                        toastr.error( err );
+                        toastr.success( err );
+                        
                     }
                 } );
             }).catch((error) => {

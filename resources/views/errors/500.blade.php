@@ -15,9 +15,10 @@
 <div class="page page-center page-404">
     <div class="container-tight py-4">
         <div class="empty">
-            <h1 class="empty-header">500.</h1>
+            <h1 class="empty-header">5200.</h1>
             <p class="empty-title">{{__('500 Critical Server Error')}}</p>
             <p class="empty-subtitle text-muted">
+asdsa
                 {{__('Server Error. This error is logged and our technic team will resolve this issue in short time.')}}
             </p>
             <div class="empty-action">

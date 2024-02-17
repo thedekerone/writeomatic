@@ -52,7 +52,7 @@ class AppServiceProvider extends ServiceProvider
 
             Schema::defaultStringLength(191);
             Paginator::useBootstrap();
-            
+
             //Force SSL HTTPS on all AJAX Requests
             if ($this->app->environment('production')) {
                 \URL::forceScheme('https');
@@ -81,6 +81,7 @@ class AppServiceProvider extends ServiceProvider
                 if (Schema::hasTable('settings_two')) {
                     if (SettingTwo::first() == null) {
                         $settings_two = new SettingTwo();
+                        $settings_two->unsplash_api_key = 'ge7HTXun3Hg-d2k0-tkcPHaX9KzEigKkR3arDkZuh5Q';
                         $settings_two->save();
                     }
                     View::share('settings_two', SettingTwo::first());
@@ -159,7 +160,7 @@ class AppServiceProvider extends ServiceProvider
                     [
                         'transport' => env('MAIL_DRIVER')?? 'smtp',
                         'host' => $settings->smtp_host ?? env('MAIL_HOST'),
-                        'port' => (int)$settings->smtp_port ?? (int)env('MAIL_PORT'),
+                        'port' => (int)($settings->smtp_port ?? env('MAIL_PORT')),
                         'encryption' => $settings->smtp_encryption ?? env('MAIL_ENCRYPTION'),
                         'username' => $settings->smtp_username ?? env('MAIL_USERNAME'),
                         'password' => $settings->smtp_password ?? env('MAIL_PASSWORD')

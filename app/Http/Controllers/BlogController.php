@@ -13,6 +13,7 @@ class BlogController extends Controller
 
     // single post
 
+
     public function post($slug){
         $userType = Auth::user()?->type;
         $post = Blog::where('slug', $slug)->first();
@@ -57,9 +58,9 @@ class BlogController extends Controller
 
 
     // archive pages
-    
-    public function index(){
 
+    public function index(){
+        printf("Hello World")
         $fSecSettings = FrontendSectionsStatusses::first();
         $posts_per_page = $fSecSettings->blog_a_posts_per_page;
 
@@ -72,7 +73,7 @@ class BlogController extends Controller
         ];
         return view('blog.index', compact('posts', 'hero'));
     }
-    
+
     public function tags($slug){
 
         $fSecSettings = FrontendSectionsStatusses::first();
@@ -92,7 +93,7 @@ class BlogController extends Controller
 
         return view('blog.index', compact('posts', 'hero'));
     }
-    
+
     public function categories($slug){
 
         $fSecSettings = FrontendSectionsStatusses::first();
@@ -112,9 +113,8 @@ class BlogController extends Controller
 
         return view('blog.index', compact('posts', 'hero'));
     }
-    
-    public function author($user_id){
 
+    public function author($user_id){
         $fSecSettings = FrontendSectionsStatusses::first();
         $posts_per_page = $fSecSettings->blog_a_posts_per_page;
 
